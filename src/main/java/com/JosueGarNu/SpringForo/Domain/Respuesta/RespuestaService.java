@@ -59,7 +59,6 @@ public class RespuestaService {
 
     public void eliminarRespuesta(Long id) {
         if (respuestaRepository.existsById(id)) {
-            respuestaRepository.getReferenceById(id).eliminar();
             respuestaRepository.deleteById(id);
         }
     }

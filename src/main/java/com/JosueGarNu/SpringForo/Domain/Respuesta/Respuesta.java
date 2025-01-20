@@ -34,10 +34,4 @@ public class Respuesta {
         this.mensaje = mensaje;
         this.fechaDeCreacion = LocalDateTime.now().format(DateTimeFormatter.ofPattern("hh:mm a | dd-MMM-yyyy"));
     }
-
-
-    public void eliminar() {
-        autor.eliminarRespuesta(this);
-        topico.eliminarRespuesta(this);
-    }
 }
