@@ -6,9 +6,9 @@ import com.JosueGarNu.SpringForo.Domain.Curso.Materia;
 import com.JosueGarNu.SpringForo.Domain.Topico.*;
 import com.JosueGarNu.SpringForo.Domain.Usuario.Autor;
 import com.JosueGarNu.SpringForo.Domain.Usuario.AutorService;
-import com.JosueGarNu.SpringForo.Domain.Usuario.DatosRespuestaUsuario;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -39,7 +39,7 @@ public class TopicoController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<DatosRespuestaTopico> mostrarTopicoEspecifico(@PathVariable Long id){
+    public ResponseEntity<DatosRespuestaTopico> mostrarTopicoEspecifico(@PathVariable Long id) {
         return ResponseEntity.ok(topicoService.mostrarTopicoEspecifico(id));
     }
 
@@ -57,5 +57,19 @@ public class TopicoController {
         DatosRespuestaTopico datosRespuestaTopico = new DatosRespuestaTopico(topico);
         URI uri = uriBuilder.path("topicos/{id}").buildAndExpand(topico.getId()).toUri();
         return ResponseEntity.created(uri).body(datosRespuestaTopico);
+    }
+
+    @Transactional
+    @PutMapping("/{id}")
+    public ResponseEntity<DatosRespuestaTopico> modificarTopico(@PathVariable @Valid @NotNull Long id,
+                                                                @RequestBody @Valid DatosActualizarTopico datosActualizarTopico) {
+        return ResponseEntity.ok(topicoService.modificarTopico(id, datosActualizarTopico));
+    }
+
+    @Transactional
+    @DeleteMapping("/{id}")
+    public ResponseEntity eliminarTopico(@PathVariable @Valid @NotNull Long id){
+        topicoService.eliminarTopico(id);
+        return ResponseEntity.noContent().build();
     }
 }
