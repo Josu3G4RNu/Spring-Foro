@@ -79,4 +79,10 @@ public class Topico {
         }
         this.estado = estado;
     }
+
+    public void actualizarDatos(DatosActualizarTopico datosActualizarTopico) {
+        this.titulo = datosActualizarTopico.titulo();
+        this.descripcion = datosActualizarTopico.descripcion();
+        setEstado(datosActualizarTopico.estado());
+    }
 }
