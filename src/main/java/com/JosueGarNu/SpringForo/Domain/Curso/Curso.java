@@ -2,6 +2,7 @@ package com.JosueGarNu.SpringForo.Domain.Curso;
 
 import com.JosueGarNu.SpringForo.Domain.Topico.Topico;
 import jakarta.persistence.*;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
@@ -10,7 +11,7 @@ import java.util.List;
 @Entity
 @Table(name = "Cursos")
 @NoArgsConstructor
-@Setter
+@Getter
 public class Curso {
 
     @Id

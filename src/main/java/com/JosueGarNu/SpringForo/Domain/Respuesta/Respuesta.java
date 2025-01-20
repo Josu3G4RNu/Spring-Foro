@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 @Table(name="Respuestas")
@@ -29,10 +30,14 @@ public class Respuesta {
     private String mensaje;
     private String fechaDeCreacion;
 
-//    public Respuesta(DTORespuesta datos){
-//        this.mensaje = datos.mensaje;
-//        // Para el topico lo que tengo que realizar es una busqueda
-//        // que me retorne el topico al cual le estoy realizando una respuesta
-//        this.horaDeCreacion = LocalDateTime.now();
-//    }
+    public Respuesta(String mensaje) {
+        this.mensaje = mensaje;
+        this.fechaDeCreacion = LocalDateTime.now().format(DateTimeFormatter.ofPattern("hh:mm a | dd-MMM-yyyy"));
+    }
+
+
+    public void eliminar() {
+        autor.eliminarRespuesta(this);
+        topico.eliminarRespuesta(this);
+    }
 }

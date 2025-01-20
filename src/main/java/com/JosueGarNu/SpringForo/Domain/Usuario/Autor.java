@@ -4,6 +4,7 @@ import com.JosueGarNu.SpringForo.Domain.Respuesta.Respuesta;
 import com.JosueGarNu.SpringForo.Domain.Topico.Topico;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Null;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -51,12 +52,17 @@ public class Autor {
         return this;
     }
 
-    public Autor crearRespuesta(Respuesta respuesta) {
+    public void crearRespuesta(Respuesta respuesta) {
         if (!topicosDondeHaInteractuado.contains(respuesta.getTopico())) {
             this.topicosDondeHaInteractuado.add(respuesta.getTopico());
         }
+        respuesta.setAutor(this);
         this.respuestasDadas.add(respuesta);
-        return this;
+    }
+
+    public void eliminarRespuesta(Respuesta respuesta){
+        respuesta.setAutor(null);
+        this.respuestasDadas.remove(respuesta);
     }
 
 }

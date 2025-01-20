@@ -1,6 +1,8 @@
 package com.JosueGarNu.SpringForo.Infra;
 
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.aop.AopInvocationException;
+import org.springframework.aop.framework.AopConfigException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -13,5 +15,9 @@ public class TratadorDeErrores {
         return ResponseEntity.notFound().build();
     }
 
+    @ExceptionHandler(AopInvocationException.class)
+    public ResponseEntity tratarNulos(){
+        return ResponseEntity.notFound().build();
+    }
 
 }

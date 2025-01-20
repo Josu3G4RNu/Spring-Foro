@@ -45,7 +45,7 @@ public class Topico {
     // y asignarse asi mismo como su autor
     private Autor autor;
 
-    @OneToMany(mappedBy = "topico",cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "topico", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Respuesta> respuestas;
 
     private String fechaDeCreacion;
@@ -65,24 +65,34 @@ public class Topico {
         this.activo = true;
     }
 
-    public void setAutor(Autor autor){
+    public void setAutor(Autor autor) {
         this.autor = autor.crearTopico(this);
     }
 
-    public void setCurso(Curso curso){
+    public void setCurso(Curso curso) {
         this.curso = curso.addTopico(this);
     }
 
     public void setEstado(Estado estado) {
-        if (estado == Estado.CERRADO){
+        if (estado == Estado.CERRADO) {
             activo = false;
         }
         this.estado = estado;
+    }
+
+    public void addRespuesta(Respuesta respuesta) {
+        this.respuestas.add(respuesta);
+        respuesta.setTopico(this);
     }
 
     public void actualizarDatos(DatosActualizarTopico datosActualizarTopico) {
         this.titulo = datosActualizarTopico.titulo();
         this.descripcion = datosActualizarTopico.descripcion();
         setEstado(datosActualizarTopico.estado());
+    }
+
+    public void eliminarRespuesta(Respuesta respuesta) {
+        respuesta.setTopico(null);
+        this.respuestas.remove(respuesta);
     }
 }

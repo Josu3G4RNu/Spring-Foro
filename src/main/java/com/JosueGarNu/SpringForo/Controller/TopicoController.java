@@ -34,19 +34,19 @@ public class TopicoController {
     private TopicoService topicoService;
 
     @GetMapping("/listado")
-    public ResponseEntity<List<DatosRespuestaTopico>> listarTopicos() {
+    public ResponseEntity<List<DatosListarTopico>> listarTopicos() {
         return ResponseEntity.ok().body(topicoService.listarTopicos());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<DatosRespuestaTopico> mostrarTopicoEspecifico(@PathVariable Long id) {
+    public ResponseEntity<DatosDelTopico> mostrarTopicoEspecifico(@PathVariable Long id) {
         return ResponseEntity.ok(topicoService.mostrarTopicoEspecifico(id));
     }
 
     @Transactional
     @PostMapping("/crear")
-    public ResponseEntity<DatosRespuestaTopico> crearTopico(@RequestBody @Valid DatosRegistroTopico datosRegistroTopico,
-                                                            UriComponentsBuilder uriBuilder) {
+    public ResponseEntity<DatosListarTopico> crearTopico(@RequestBody @Valid DatosRegistroTopico datosRegistroTopico,
+                                                         UriComponentsBuilder uriBuilder) {
         Autor autorDelTopico = autorService.buscarAutor(datosRegistroTopico.nombreDelUsuario());
         Materia materia = Materia.obtenerMateria(datosRegistroTopico.materia());
         Curso cursoDelTopico = cursoRepository.findByNombre(materia);
@@ -54,15 +54,15 @@ public class TopicoController {
         topico.setAutor(autorDelTopico);
         topico.setCurso(cursoDelTopico);
         topicoRepository.save(topico);
-        DatosRespuestaTopico datosRespuestaTopico = new DatosRespuestaTopico(topico);
+        DatosListarTopico datosListarTopico = new DatosListarTopico(topico);
         URI uri = uriBuilder.path("topicos/{id}").buildAndExpand(topico.getId()).toUri();
-        return ResponseEntity.created(uri).body(datosRespuestaTopico);
+        return ResponseEntity.created(uri).body(datosListarTopico);
     }
 
     @Transactional
     @PutMapping("/{id}")
-    public ResponseEntity<DatosRespuestaTopico> modificarTopico(@PathVariable @Valid @NotNull Long id,
-                                                                @RequestBody @Valid DatosActualizarTopico datosActualizarTopico) {
+    public ResponseEntity<DatosListarTopico> modificarTopico(@PathVariable @Valid @NotNull Long id,
+                                                             @RequestBody @Valid DatosActualizarTopico datosActualizarTopico) {
         return ResponseEntity.ok(topicoService.modificarTopico(id, datosActualizarTopico));
     }
 

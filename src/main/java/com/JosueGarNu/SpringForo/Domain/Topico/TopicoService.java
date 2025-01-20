@@ -11,29 +11,32 @@ public class TopicoService {
     @Autowired
     TopicoRepository topicoRepository;
 
-    public DatosRespuestaTopico mostrarTopicoEspecifico(Long id){
-        return new DatosRespuestaTopico(topicoRepository.getReferenceById(id));
+    public DatosDelTopico mostrarTopicoEspecifico(Long id) {
+        if (topicoRepository.existeYEstaActivo(id)) {
+            return new DatosDelTopico(topicoRepository.getReferenceById(id));
+        }
+        return null;
     }
 
-    public List<DatosRespuestaTopico> listarTopicos(){
-        return topicoRepository.findByActivoTrue().stream().map(DatosRespuestaTopico::new).toList();
+    public List<DatosListarTopico> listarTopicos() {
+        return topicoRepository.findByActivoTrue().stream().map(DatosListarTopico::new).toList();
     }
 
-    public DatosRespuestaTopico modificarTopico(Long id, DatosActualizarTopico datosActualizarTopico){
-        boolean existe = topicoRepository.existsById(id);
+    public DatosListarTopico modificarTopico(Long id, DatosActualizarTopico datosActualizarTopico) {
+        boolean existe = topicoRepository.existeYEstaActivo(id);
 
-        if(existe){
+        if (existe) {
             Topico topico = topicoRepository.getReferenceById(id);
             topico.actualizarDatos(datosActualizarTopico);
-            return new DatosRespuestaTopico(topico);
+            return new DatosListarTopico(topico);
         }
         return null;
     }
 
     public void eliminarTopico(Long id) {
-        boolean existe = topicoRepository.existsById(id);
+        boolean existe = topicoRepository.existeYEstaActivo(id);
 
-        if(existe){
+        if (existe) {
             Topico topico = topicoRepository.getReferenceById(id);
             topico.setEstado(Estado.CERRADO);
         }

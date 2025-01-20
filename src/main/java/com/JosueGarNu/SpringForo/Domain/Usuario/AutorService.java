@@ -13,4 +13,9 @@ public class AutorService {
         return autorRepository.findByNombre(nombreDelAutor);
     }
 
+    public DatosHomeUsuario mostrarPerfilDelUsuario(Long id){
+        Autor autor = autorRepository.getReferenceById(id);
+        return new DatosHomeUsuario(autor);
+    }
+
 }
