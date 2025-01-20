@@ -8,14 +8,18 @@ import jakarta.validation.constraints.Null;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Table(name = "usuarios")
 @Entity(name = "Usuario")
 @Getter @Setter @NoArgsConstructor
-public class Autor {
+public class Autor implements UserDetails {
 
 
     @Id
@@ -31,7 +35,7 @@ public class Autor {
 
     // Debes hacerle HASH antes de ingresarla a la base de datos
     @Column(nullable = false)
-    private String password;
+    private String clave;
 
     @OneToMany(mappedBy = "autor", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Topico> topicosDondeHaInteractuado;
@@ -42,7 +46,7 @@ public class Autor {
     public Autor(DatosRegistroUsuario datosRegistroUsuario) {
         this.nombre = datosRegistroUsuario.nombreUsuario();
         this.email = datosRegistroUsuario.email();
-        this.password = datosRegistroUsuario.password();
+        this.clave = datosRegistroUsuario.password();
         this.topicosDondeHaInteractuado = new ArrayList<>();
         this.respuestasDadas = new ArrayList<>();
     }
@@ -60,9 +64,39 @@ public class Autor {
         this.respuestasDadas.add(respuesta);
     }
 
-    public void eliminarRespuesta(Respuesta respuesta){
-        respuesta.setAutor(null);
-        this.respuestasDadas.remove(respuesta);
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
     }
 
+    @Override
+    public String getPassword() {
+        return clave;
+    }
+
+    @Override
+    public String getUsername() {
+        return nombre;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }

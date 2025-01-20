@@ -1,0 +1,2 @@
+ALTER TABLE usuarios
+    MODIFY clave VARCHAR(255) NOT NULL;
