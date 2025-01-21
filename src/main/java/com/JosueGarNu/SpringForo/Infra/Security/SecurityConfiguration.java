@@ -26,8 +26,11 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable) // Nueva forma de deshabilitar CSRF
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Configuración de la gestión de sesiones
-                .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(HttpMethod.POST, "/user/login").permitAll().anyRequest().authenticated())
+                .authorizeHttpRequests((authorizeHttpRequests) ->
+                 authorizeHttpRequests
+                        .requestMatchers(HttpMethod.POST, "/user/login").permitAll()
+                        .requestMatchers("swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                        .anyRequest().authenticated())
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class); // Agregar filtro personalizado
         return http.build();
     }
